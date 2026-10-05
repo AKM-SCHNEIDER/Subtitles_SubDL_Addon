@@ -108,7 +108,12 @@ class SubtitlesProvider:
             languages = language_data["languages"]
 
         if isinstance(languages, str):
-            languages = languages.split(",")[0].strip()
+            languages = [lang.strip() for lang in languages.split(",") if lang and lang.strip()]
+            languages = ",".join(languages) if languages else "en"
+        elif isinstance(languages, (list, tuple)):
+            languages = ",".join(str(lang).strip() for lang in languages if str(lang).strip())
+            if not languages:
+                languages = "en"
 
         if not languages:
             languages = "en"
